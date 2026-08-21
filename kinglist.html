@@ -54,6 +54,7 @@
   <div id="Rounds" class="tabcontent">
     <h1>Rounds</h1>
 	<h2>Current King: <span id="roundsKing"></span></h2>
+	<h4>Current Streak: <span id="roundsStreak"></span></h4>
     <table id="roundsTable">
       <thead>
         <tr><th>King</th><th>Date</th></tr>
@@ -65,6 +66,7 @@
   <div id="Dispute" class="tabcontent">
     <h1>Gentlemen's Dispute</h1>
 	<h2>Current King: <span id="disputeKing"></span></h2>
+	<h4>Current Streak: <span id="disputeStreak"></span></h4>
     <table id="disputeTable">
       <thead>
         <tr><th>King</th><th>Date</th></tr>
@@ -76,6 +78,7 @@
   <div id="Chicken" class="tabcontent">
     <h1>Chicken</h1>
 	<h2>Current King: <span id="chickenKing"></span></h2>
+	<h4>Current Streak: <span id="chickenStreak"></span></h4>
     <table id="chickenTable">
       <thead>
         <tr><th>King</th><th>Date</th></tr>
@@ -118,7 +121,10 @@
 	  evt.currentTarget.className += " active";
 	}
 	
-	function getCurrentReignDetails(gameData) {
+	function getCurrentStreakDetails(gameData) {
+	  if (gameData == null || gameData.length == 0) {
+	    return 'None';
+	  }
 	  const king = gameData[0].name;
 	  let startDate = gameData[0].date;
 	  let count = 1;
@@ -132,14 +138,17 @@
 		}
 	  }
 	  
-	  const pastDate = new Date(startDate);
-	  const today = new Date();
+	  let daysSince = -1;
+	  if (startDate.length > 0) {	  
+		  const pastDate = new Date(startDate);
+		  const today = new Date();
+		  
+		  const timeDiff = today - pastDate; 
+		  // Convert milliseconds into days
+		  daysSince = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); 
+	  }
 	  
-	  const timeDiff = today - pastDate; 
-	  // Convert milliseconds into days
-	  const daysSince = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); 
-	  
-	  return `${king} (${count} win${count > 1 ? 's' : ''}, ${daysSince} day${daysSince > 1 ? 's' : ''})`;
+	  return `${count} win${count > 1 ? 's' : ''}, ${daysSince < 0 ? 'unknown days' : (daysSince > 1 ? daysSince+' days' : '1 day')}`;
 	}
 
     const roundstbody = document.querySelector("#roundsTable tbody");
@@ -156,13 +165,16 @@
     });
 	
 	if (data["rounds"].length > 0) {
-	  document.getElementById("roundsKing").innerHTML=getCurrentReignDetails(data["rounds"])
+	  document.getElementById("roundsKing").innerHTML=data["rounds"][0].name
+	  document.getElementById("roundsStreak").innerHTML=getCurrentStreakDetails(data["rounds"])
 	}
 	if (data["dispute"].length > 0) {
-	  document.getElementById("disputeKing").innerHTML=getCurrentReignDetails(data["dispute"])
+	  document.getElementById("disputeKing").innerHTML=data["dispute"][0].name
+	  document.getElementById("disputeStreak").innerHTML=getCurrentStreakDetails(data["dispute"])
 	}
 	if (data["chicken"].length > 0) {
-	  document.getElementById("chickenKing").innerHTML=getCurrentReignDetails(data["chicken"])
+	  document.getElementById("chickenKing").innerHTML=data["chicken"][0].name
+	  document.getElementById("chickenStreak").innerHTML=getCurrentStreakDetails(data["chicken"])
 	}
 	document.getElementById("defaultOpen").click();
   </script>
