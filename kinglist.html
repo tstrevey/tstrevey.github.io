@@ -88,6 +88,7 @@
     const data = {
       rounds: [
         { name: "Plato360", date: "2026-08-20" },
+        { name: "Plato360", date: "2026-08-15" },
         { name: "TekTao", date: "" }
       ],
       dispute: [
@@ -118,17 +119,28 @@
 	  evt.currentTarget.className += " active";
 	}
 	
-	function getDaysSinceDate(pastDateString) {
-	  const pastDate = new Date(pastDateString);
+	function getCurrentReignDetails(gameData) {
+	  const king = gameData[0].name;
+	  let startDate = gameData[0].date;
+	  let count = 1;
+	  
+	  for (let i = 1; i < gameData.length; i++) {
+	    if (king === gameData[i].name){
+		  startDate = gameData[i].date;
+		  count = count + 1;
+		} else {
+		  break;
+		}
+	  }
+	  
+	  const pastDate = new Date(startDate);
 	  const today = new Date();
 	  
-	  // Calculate the difference in milliseconds
 	  const timeDiff = today - pastDate; 
-	  
 	  // Convert milliseconds into days
 	  const daysSince = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); 
 	  
-	  return daysSince;
+	  return `${king} (${count} wins, ${daysSince} days)`;
 	}
 
     const roundstbody = document.querySelector("#roundsTable tbody");
@@ -145,13 +157,13 @@
     });
 	
 	if (data["rounds"].length > 0) {
-	  document.getElementById("roundsKing").innerHTML=data["rounds"][0].name+" ("+getDaysSinceDate(data["rounds"][0].date)+" days)"
+	  document.getElementById("roundsKing").innerHTML=getCurrentReignDetails(data["rounds"])
 	}
 	if (data["dispute"].length > 0) {
-	  document.getElementById("disputeKing").innerHTML=data["dispute"][0].name+" ("+getDaysSinceDate(data["dispute"][0].date)+" days)"
+	  document.getElementById("disputeKing").innerHTML=getCurrentReignDetails(data["dispute"])
 	}
 	if (data["chicken"].length > 0) {
-	  document.getElementById("chickenKing").innerHTML=data["chicken"][0].name+" ("+getDaysSinceDate(data["chicken"][0].date)+" days)"
+	  document.getElementById("chickenKing").innerHTML=getCurrentReignDetails(data["chicken"])
 	}
 	document.getElementById("defaultOpen").click();
   </script>
