@@ -52,8 +52,8 @@
   
   <!-- Tab content -->
   <div id="Rounds" class="tabcontent">
-    <h3>Rounds</h3>
-	<p>Current King: <span id="roundsKing"></span></p>
+    <h1>Rounds</h1>
+	<h2>Current King: <span id="roundsKing"></span></h2>
     <table id="roundsTable">
       <thead>
         <tr><th>King</th><th>Date</th></tr>
@@ -63,8 +63,8 @@
   </div>
   
   <div id="Dispute" class="tabcontent">
-    <h3>Gentlemen's Dispute</h3>
-	<p>Current King: <span id="disputeKing"></span></p>
+    <h1>Gentlemen's Dispute</h1>
+	<h2>Current King: <span id="disputeKing"></span></h2>
     <table id="disputeTable">
       <thead>
         <tr><th>King</th><th>Date</th></tr>
@@ -74,8 +74,8 @@
   </div>
   
   <div id="Chicken" class="tabcontent">
-    <h3>Chicken</h3>
-	<p>Current King: <span id="chickenKing"></span></p>
+    <h1>Chicken</h1>
+	<h2>Current King: <span id="chickenKing"></span></h2>
     <table id="chickenTable">
       <thead>
         <tr><th>King</th><th>Date</th></tr>
@@ -139,7 +139,7 @@
 	  // Convert milliseconds into days
 	  const daysSince = Math.floor(timeDiff / (1000 * 60 * 60 * 24)); 
 	  
-	  return `${king} (${count} wins, ${daysSince} days)`;
+	  return `${king} (${count} win${count > 1 ? 's' : ''}, ${daysSince} day${daysSince > 1 ? 's' : ''})`;
 	}
 
     const roundstbody = document.querySelector("#roundsTable tbody");
